@@ -42,15 +42,3 @@ receiver.to_prepare  do
   UsersHelper.send(:include,  LocalAvatarsPlugin::UsersHelperPatch)
 end
 
-require 'local_avatars'
-
-# patches to Redmine
-require "account_controller_patch.rb"
-require "application_helper_avatar_patch.rb"
-require "my_controller_patch.rb"
-require "users_avatar_patch.rb"   # User model
-require "users_controller_patch.rb"
-require "users_helper_avatar_patch.rb"  # UsersHelper
-
-# hooks
-require 'redmine_local_avatars/hooks'
