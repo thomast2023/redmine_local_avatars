@@ -38,7 +38,7 @@ module RedmineLocalAvatars
 		rescue => e
 		  $stderr.puts("save_or_delete_avatar raised an exception. exception: #{e.class}: #{e.message}")
 		  flash[:error] = @possible_error || e.message
-		  redirect_to :action => 'avatar'
+		  redirect_to :action => 'show_avatar'
 		end
 	  end
 	end
