@@ -1,5 +1,9 @@
 module RedmineLocalAvatars
     module AvatarManagement
+        included do
+            helper :attachments
+            include AttachmentsHelper
+        end
       def save_or_delete_avatar
         # clear the attachments. Then, save if
         # we have to delete. Otherwise add the new
