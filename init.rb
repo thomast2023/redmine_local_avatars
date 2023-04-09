@@ -18,6 +18,7 @@
 
 require 'redmine'
 require_dependency File.expand_path('../lib/redmine_local_avatars/hooks', __FILE__)
+require_dependency 'redmine_local_avatars/application_helper_patch'
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
@@ -27,28 +28,18 @@ Redmine::Plugin.register :redmine_local_avatars do
   version '1.0.6'
 end
 
-Rails.configuration.to_prepare do
-  [
-    'account_controller_patch',
-    'application_helper_avatar_patch',
-    'my_controller_patch',
-    'users_avatar_patch',
-    'users_controller_patch',
-    'users_helper_avatar_patch'
-  ].each do |patch|
-    require_dependency File.expand_path("../lib/redmine_local_avatars/#{patch}", __FILE__)
-  end
-
+receiver = ActiveSupport::Reloader.to_prepare do
+  require_dependency 'project'
+  require_dependency 'principal'
+  require_dependency 'user'
+  
   helper_klass = ApplicationHelper.method_defined?(:avatar) ? ApplicationHelper : AvatarsHelper
-
-  AccountController.send(:include, RedmineLocalAvatars::AccountControllerPatch)
-  helper_klass.send(:include, RedmineLocalAvatars::ApplicationHelperAvatarPatch)
-  MyController.send(:include, RedmineLocalAvatars::MyControllerPatch)
-  User.send(:include, RedmineLocalAvatars::UsersAvatarPatch)
-  UsersController.send(:include, RedmineLocalAvatars::UsersControllerPatch)
-  UsersHelper.send(:include, RedmineLocalAvatars::UsersHelperAvatarPatch)
-
-  class RedmineLocalAvatars::Hooks < Redmine::Hook::ViewListener
-    render_on :view_my_account_contextual, :partial => 'hooks/redmine_local_avatars/view_my_account_contextual'
-  end  
-end
+  
+  AccountController.send(:include, LocalAvatarsPlugin::AccountControllerPatch)
+  helper_klass.send(:include, LocalAvatarsPlugin::ApplicationAvatarPatch)
+  MyController.send(:include, LocalAvatarsPlugin::MyControllerPatch)
+  User.send(:include, LocalAvatarsPlugin::UsersAvatarPatch)
+  UsersController.send(:include, LocalAvatarsPlugin::UsersControllerPatch)
+  UsersHelper.send(:include, LocalAvatarsPlugin::UsersHelperPatch)
+  ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperPatch)
+  end
