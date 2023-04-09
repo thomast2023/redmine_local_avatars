@@ -18,6 +18,7 @@ module RedmineLocalAvatars
           return "<img class=\"gravatar\" title=\"#{title}\" width=\"#{options[:size]}\" height=\"#{options[:size]}\" src=\"#{image_url}\" />".html_safe
         end
       end
+      puts "avatar_without_local: #{user}"
       avatar_without_local(user, options)
     end
   end
