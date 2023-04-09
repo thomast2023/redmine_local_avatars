@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_relative 'lib/redmine_local_avatars/hooks'
+require_dependency File.expand_path('../lib/redmine_local_avatars/user_patch', __FILE__)
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
@@ -34,7 +35,7 @@ Rails.configuration.to_prepare do
   # Include the patches
   AccountController.include(RedmineLocalAvatars::AccountControllerPatch)
   MyController.include(RedmineLocalAvatars::MyControllerPatch)
-  User.include(RedmineLocalAvatars::UserAvatarPatch)
+  User.include(RedmineLocalAvatars::UserPatch)
   UsersController.include(RedmineLocalAvatars::UsersControllerPatch)
   UsersHelper.include(RedmineLocalAvatars::UsersHelperPatch)
   AvatarsHelper.send(:include, RedmineLocalAvatars::AvatarsHelper)
