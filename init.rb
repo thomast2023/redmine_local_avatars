@@ -28,12 +28,16 @@ Redmine::Plugin.register :redmine_local_avatars do
 end
 
 Rails.configuration.to_prepare do
-  require_dependency 'redmine_local_avatars/account_controller_patch'
-  require_dependency 'redmine_local_avatars/application_helper_avatar_patch'
-  require_dependency 'redmine_local_avatars/my_controller_patch'
-  require_dependency 'redmine_local_avatars/users_avatar_patch'
-  require_dependency 'redmine_local_avatars/users_controller_patch'
-  require_dependency 'redmine_local_avatars/users_helper_avatar_patch'
+  [
+    'account_controller_patch',
+    'application_helper_avatar_patch',
+    'my_controller_patch',
+    'users_avatar_patch',
+    'users_controller_patch',
+    'users_helper_avatar_patch'
+  ].each do |patch|
+    require_dependency File.expand_path("../lib/redmine_local_avatars/#{patch}", __FILE__)
+  end
 
   helper_klass = ApplicationHelper.method_defined?(:avatar) ? ApplicationHelper : AvatarsHelper
 
