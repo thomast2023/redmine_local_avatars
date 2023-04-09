@@ -33,6 +33,8 @@ module RedmineLocalAvatars
 			options[:size] = "64" unless options[:size]
 			title = "#{user.name}"
 			return "<img class=\"gravatar\" title=\"#{title}\" width=\"#{options[:size]}\" height=\"#{options[:size]}\" src=\"#{image_url}\" />".html_safe
+		  else
+			options[:size] = "64" unless options[:size]
 		  end
 		end
 		avatar_without_local(user, options)
