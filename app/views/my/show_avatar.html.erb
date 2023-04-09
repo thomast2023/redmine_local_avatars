@@ -1,1 +1,5 @@
-<%= render :partial => 'show_avatar' %>
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'redmine_local_avatars', :plugin => 'redmine_local_avatars' %>
+<% end %>
+
+<%= render partial: 'my/avatar_form', locals: { user: @user } %>
