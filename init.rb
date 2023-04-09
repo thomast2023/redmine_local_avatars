@@ -18,7 +18,7 @@
 
 require 'redmine'
 require_dependency File.expand_path('../lib/redmine_local_avatars/hooks', __FILE__)
-require_dependency 'redmine_local_avatars/application_helper_patch'
+require_dependency File.expand_path('../lib/redmine_local_avatars/application_helper_patch', __FILE__)
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
