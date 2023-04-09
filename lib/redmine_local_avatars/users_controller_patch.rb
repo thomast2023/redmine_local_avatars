@@ -21,49 +21,50 @@ module RedmineLocalAvatars
   
 	  	def self.included(base) # :nodoc:
 			base.class_eval do
-			helper :attachments
-			include AttachmentsHelper
-	
-			include InstanceMethods
-		end
-	end
-  
-	module InstanceMethods
-		def get_avatar
-			@user = User.find(params[:id])
-			send_avatar(@user)
-		end
-
-		def save_avatar
-			@user = User.find(params[:id])
-
-			begin
-			save_or_delete # see the LocalAvatars module
-			rescue
-			flash[:error] = @possible_error
+				helper :attachments
+				include AttachmentsHelper
+		
+				include InstanceMethods
 			end
-			redirect_to :action => 'edit', :id => @user
 		end
-	
-		def save_or_delete
-			# clear the attachments.  Then, save if 
-			# we have to delete.  Otherwise add the new
-			# avatar and then save
-			# TODO:  This doesn't play nice with any other possible
-			# attachments on the user (just because there aren't any
-			# now doesn't mean there won't be in the future.  It should
-			# be changed to only remove an attachment with description == 'avatar'
-			@user.attachments.clear
-			if params[:commit] == l(:button_delete) then
-				@possible_error = l(:unable_to_delete_avatar)
-				@user.save!
-				flash[:notice] = l(:avatar_deleted)
-			else # take anything else as save
-				file_field = params[:avatar]
-				Attachment.attach_files(@user, {'first' => {'file' => file_field, 'description' => 'avatar'}})
-				@possible_error = l(:error_saving_avatar)
-				@user.save!
-				flash[:notice] = l(:message_avatar_uploaded)
+  
+		module InstanceMethods
+			def get_avatar
+				@user = User.find(params[:id])
+				send_avatar(@user)
+			end
+
+			def save_avatar
+				@user = User.find(params[:id])
+
+				begin
+				save_or_delete # see the LocalAvatars module
+				rescue
+				flash[:error] = @possible_error
+				end
+				redirect_to :action => 'edit', :id => @user
+			end
+		
+			def save_or_delete
+				# clear the attachments.  Then, save if 
+				# we have to delete.  Otherwise add the new
+				# avatar and then save
+				# TODO:  This doesn't play nice with any other possible
+				# attachments on the user (just because there aren't any
+				# now doesn't mean there won't be in the future.  It should
+				# be changed to only remove an attachment with description == 'avatar'
+				@user.attachments.clear
+				if params[:commit] == l(:button_delete) then
+					@possible_error = l(:unable_to_delete_avatar)
+					@user.save!
+					flash[:notice] = l(:avatar_deleted)
+				else # take anything else as save
+					file_field = params[:avatar]
+					Attachment.attach_files(@user, {'first' => {'file' => file_field, 'description' => 'avatar'}})
+					@possible_error = l(:error_saving_avatar)
+					@user.save!
+					flash[:notice] = l(:message_avatar_uploaded)
+				end
 			end
 		end
 	end
