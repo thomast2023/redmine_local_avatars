@@ -28,7 +28,7 @@ module RedmineLocalAvatars
 	  end
   
 	  module InstanceMethods
-		def avatar
+		def show_avatar
 		  @user = User.current
 		  logger.debug("MyController User: #{@user}")
 		end
