@@ -1,5 +1,5 @@
 module RedmineLocalAvatars
-  module ApplicationHelperPatch
+  module AvatarsHelperPatch
     extend ActiveSupport::Concern
 
     included do
@@ -24,4 +24,4 @@ module RedmineLocalAvatars
   end
 end
 
-ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperPatch)
+AvatarsHelper.send(:include, RedmineLocalAvatars::AvatarsHelperPatch)
