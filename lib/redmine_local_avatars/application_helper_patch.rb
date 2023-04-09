@@ -8,6 +8,7 @@ module RedmineLocalAvatars
     end
 
     def avatar_with_local(user, options = {})
+      logger.debug("avatar_with_local: #{user}")
       if user.is_a?(User)
         av = user.attachments.find_by_description 'avatar'
         if av
