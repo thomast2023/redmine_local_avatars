@@ -23,6 +23,7 @@ module RedmineLocalAvatars
 	  included do
 		helper :attachments
 		include AttachmentsHelper
+		include AvatarManagement
 	  end
   
 	  def show_avatar
