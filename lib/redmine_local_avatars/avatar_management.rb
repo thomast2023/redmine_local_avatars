@@ -1,3 +1,5 @@
+require_dependency 'attachment'
+
 module RedmineLocalAvatars
     module AvatarManagement
       def save_or_delete_avatar
