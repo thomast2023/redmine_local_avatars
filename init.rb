@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
+require_dependency 'redmine_local_avatars/hooks'
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
@@ -42,4 +43,8 @@ Rails.configuration.to_prepare do
   User.send(:include, RedmineLocalAvatars::UsersAvatarPatch)
   UsersController.send(:include, RedmineLocalAvatars::UsersControllerPatch)
   UsersHelper.send(:include, RedmineLocalAvatars::UsersHelperAvatarPatch)
+
+  class RedmineLocalAvatars::Hooks < Redmine::Hook::ViewListener
+    render_on :view_my_account_contextual, :partial => 'hooks/redmine_local_avatars/view_my_account_contextual'
+  end  
 end
