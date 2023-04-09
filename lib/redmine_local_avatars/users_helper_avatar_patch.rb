@@ -31,4 +31,4 @@ module RedmineLocalAvatars
     end
   end
 end
-
+UsersHelper.send(:include, RedmineLocalAvatars::UsersHelperAvatarPatch)

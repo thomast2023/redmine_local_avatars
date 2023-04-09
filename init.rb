@@ -38,15 +38,7 @@ Rails.configuration.to_prepare do
   ].each do |patch|
     require_dependency File.expand_path("../lib/redmine_local_avatars/#{patch}", __FILE__)
   end
-
-  helper_klass = ApplicationHelper.method_defined?(:avatar) ? ApplicationHelper : AvatarsHelper
-
-  AccountController.send(:include, RedmineLocalAvatars::AccountControllerPatch)
-  helper_klass.send(:include, RedmineLocalAvatars::ApplicationHelperAvatarPatch)
-  MyController.send(:include, RedmineLocalAvatars::MyControllerPatch)
-  User.send(:include, RedmineLocalAvatars::UsersAvatarPatch)
-  UsersController.send(:include, RedmineLocalAvatars::UsersControllerPatch)
-  UsersHelper.send(:include, RedmineLocalAvatars::UsersHelperAvatarPatch)
+  
 
   class RedmineLocalAvatars::Hooks < Redmine::Hook::ViewListener
     render_on :view_my_account_contextual, :partial => 'hooks/redmine_local_avatars/view_my_account_contextual'
