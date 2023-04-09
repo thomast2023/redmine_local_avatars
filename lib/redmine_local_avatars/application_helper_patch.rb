@@ -24,4 +24,4 @@ module RedmineLocalAvatars
   end
 end
 
-ApplicationHelper.send(:include, ApplicationHelperPatch)
+ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperPatch)
