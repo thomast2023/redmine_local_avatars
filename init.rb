@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require 'redmine'
-require_dependency 'redmine_local_avatars/hooks'
+require_dependency 'lib/redmine_local_avatars/hooks'
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
