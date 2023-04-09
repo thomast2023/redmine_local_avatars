@@ -39,6 +39,6 @@ Rails.configuration.to_prepare do
   User.include(RedmineLocalAvatars::UserAvatarPatch)
   UsersController.include(RedmineLocalAvatars::UsersControllerPatch)
   UsersHelper.include(RedmineLocalAvatars::UsersHelperPatch)
-  ApplicationHelper.include(RedmineLocalAvatars::ApplicationHelperPatch)
+  ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperPatch)
 end
 
