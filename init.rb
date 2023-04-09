@@ -28,18 +28,17 @@ Redmine::Plugin.register :redmine_local_avatars do
   version '1.0.6'
 end
 
-receiver = ActiveSupport::Reloader.to_prepare do
+Rails.configuration.to_prepare do
   require_dependency 'project'
   require_dependency 'principal'
   require_dependency 'user'
-  
-  helper_klass = ApplicationHelper.method_defined?(:avatar) ? ApplicationHelper : AvatarsHelper
-  
-  AccountController.send(:include, LocalAvatarsPlugin::AccountControllerPatch)
-  helper_klass.send(:include, LocalAvatarsPlugin::ApplicationAvatarPatch)
-  MyController.send(:include, LocalAvatarsPlugin::MyControllerPatch)
-  User.send(:include, LocalAvatarsPlugin::UsersAvatarPatch)
-  UsersController.send(:include, LocalAvatarsPlugin::UsersControllerPatch)
-  UsersHelper.send(:include, LocalAvatarsPlugin::UsersHelperPatch)
-  ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperPatch)
-  end
+
+  # Include the patches
+  AccountController.include(RedmineLocalAvatars::AccountControllerPatch)
+  MyController.include(RedmineLocalAvatars::MyControllerPatch)
+  User.include(RedmineLocalAvatars::UserAvatarPatch)
+  UsersController.include(RedmineLocalAvatars::UsersControllerPatch)
+  UsersHelper.include(RedmineLocalAvatars::UsersHelperPatch)
+  ApplicationHelper.include(RedmineLocalAvatars::ApplicationHelperPatch)
+end
+
