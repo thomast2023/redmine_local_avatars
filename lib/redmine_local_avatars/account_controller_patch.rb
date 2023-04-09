@@ -61,4 +61,5 @@ module RedmineLocalAvatars
 	  end
 	end
   end
-  
+
+  AccountController.send(:include, RedmineLocalAvatars::AccountControllerPatch)

@@ -40,3 +40,4 @@ module RedmineLocalAvatars
 	end
   end
   
+  ApplicationHelper.send(:include, RedmineLocalAvatars::ApplicationHelperAvatarPatch)
