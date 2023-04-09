@@ -28,8 +28,14 @@ module RedmineLocalAvatars
   
 	  def get_avatar
 		@user = User.find(params[:id])
-		send_avatar(@user)
+		avatar = @user.attachments.find_by_description('avatar')
+		if avatar
+		  send_data avatar.diskfile, filename: avatar.filename, type: avatar.content_type, disposition: 'inline'
+		else
+		  head :ok
+		end
 	  end
+	  
   
 	  def save_avatar
 		@user = User.find(params[:id])
