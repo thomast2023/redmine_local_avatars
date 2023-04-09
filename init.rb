@@ -16,9 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'redmine'
-require_dependency File.expand_path('../lib/redmine_local_avatars/hooks', __FILE__)
-require_dependency File.expand_path('../lib/redmine_local_avatars/application_helper_patch', __FILE__)
+require_relative 'lib/redmine_local_avatars/hooks'
+require_relative 'lib/redmine_local_avatars/application_helper_patch'
 
 Redmine::Plugin.register :redmine_local_avatars do
   name 'Redmine Local Avatars plugin'
