@@ -28,7 +28,7 @@ module RedmineLocalAvatars
   
 	  def show_avatar
 		@user = User.current || User.anonymous
-		logger.debug("MyController User: #{@user}")
+		puts "MyController User: #{@user}"
 	  end
   
 	  def save_avatar
