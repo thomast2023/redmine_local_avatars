@@ -1,24 +1,32 @@
-require_dependency 'attachment'
-
 module RedmineLocalAvatars
     module AvatarManagement
       def save_or_delete_avatar
-        # clear the attachments. Then, save if
-        # we have to delete. Otherwise add the new
-        # avatar and then save
-        @user.attachments.clear
-        if params[:commit] == l(:button_delete) then
+        avatar = Attachment.where(container_id: @user.id, container_type: 'Principal', description: 'avatar').first
+  
+        # Delete existing avatar if exists
+        if avatar
           @possible_error = l(:unable_to_delete_avatar)
-          @user.save!
+          avatar.destroy
           flash[:notice] = l(:avatar_deleted)
-        else # take anything else as save
+        end
+  
+        # If not deleting, save new avatar
+        unless params[:commit] == l(:button_delete)
           file_field = params[:avatar]
-          Attachment.attach_files(@user, {'first' => {'file' => file_field, 'description' => 'avatar'}})
+          attachment = Attachment.create!(
+            file: file_field,
+            author: @user,
+            container_id: @user.id,
+            container_type: 'Principal',
+            description: 'avatar'
+          )
           @possible_error = l(:error_saving_avatar)
-          @user.save!
           flash[:notice] = l(:message_avatar_uploaded)
         end
+      rescue => e
+        flash[:error] = @possible_error || e.message
       end
     end
   end
+  
   
