@@ -1,0 +1,32 @@
+/* Avatar container */
+.avatar-container {
+    display: inline-block;
+    position: relative;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  
+  /* Avatar image */
+  .avatar {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+  /* Avatar form */
+  .avatar-form {
+    margin-bottom: 20px;
+  }
+  
+  /* Avatar input field */
+  .avatar-input {
+    margin-top: 10px;
+  }
+  
+  /* Avatar upload button */
+  .avatar-upload-btn {
+    margin-top: 10px;
+  }
+  
