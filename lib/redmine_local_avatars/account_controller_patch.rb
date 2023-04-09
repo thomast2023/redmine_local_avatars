@@ -16,23 +16,49 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-require 'local_avatars'
 
-module LocalAvatarsPlugin
+module RedmineLocalAvatars
 	module AccountControllerPatch
-
-		def self.included(base) # :nodoc:
-			base.class_eval do
-				helper :attachments
-				include AttachmentsHelper 
-			end
+	  def self.included(base) # :nodoc:
+		base.class_eval do
+		  helper :attachments
+		  include AttachmentsHelper
 		end
-
-		include LocalAvatars
-
+  
+		base.send(:include, InstanceMethods)
+	  end
+  
+	  module InstanceMethods
 		def get_avatar
-			@user = User.find(params[:id])
-			send_avatar(@user)
+		  @user = User.find(params[:id])
+		  send_avatar(@user)
 		end
+  
+		# Move the send_avatar method from the LocalAvatars module to this InstanceMethods module
+		def send_avatar(user)
+		  if user.avatar.nil?
+			render_404
+		  else
+			# Make sure the user has access to the image.
+			if Redmine::VERSION::MAJOR < 4
+			  if !visible?(user)
+				render_404
+				return
+			  end
+			else
+			  if !user.active? || !user.visible?
+				render_404
+				return
+			  end
+			end
+  
+			# Send the file to the user.
+			send_file user.avatar.diskfile, :filename => filename_for_content_disposition(user.avatar.filename),
+											 :type => user.avatar.content_type,
+											 :disposition => 'inline'
+		  end
+		end
+	  end
 	end
-end
+  end
+  

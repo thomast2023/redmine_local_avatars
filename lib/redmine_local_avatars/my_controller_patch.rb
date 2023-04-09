@@ -16,34 +16,33 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	 02110-1301, USA.
 
-require 'local_avatars'
-
-module LocalAvatarsPlugin
+module RedmineLocalAvatars
 	module MyControllerPatch
-		def self.included(base) # :nodoc:		 
-			base.class_eval do			
-				helper :attachments
-				include AttachmentsHelper 
-			end
+	  def self.included(base) # :nodoc:
+		base.class_eval do
+		  helper :attachments
+		  include AttachmentsHelper
 		end
-
-		include LocalAvatars
-
+  
+		base.send(:include, InstanceMethods)
+	  end
+  
+	  module InstanceMethods
 		def avatar
-			@user = User.current
+		  @user = User.current
 		end
-
+  
 		def save_avatar
-			@user = User.current
-			begin
-				save_or_delete # see the LocalAvatars module
-				redirect_to :action => 'account', :id => @user
-			rescue => e
-				$stderr.puts("save_or_delete raise an exception.	exception: #{e.class}:	#{e.message}")
-				flash[:error] = @possible_error || e.message
-				redirect_to :action => 'avatar'
-			end
+		  @user = User.current
+		  begin
+			save_or_delete_avatar # Call the method from UsersControllerPatch
+			redirect_to :action => 'account', :id => @user
+		  rescue => e
+			$stderr.puts("save_or_delete_avatar raised an exception. exception: #{e.class}: #{e.message}")
+			flash[:error] = @possible_error || e.message
+			redirect_to :action => 'avatar'
+		  end
 		end
+	  end
 	end
-end
-
+  end

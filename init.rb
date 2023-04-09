@@ -26,19 +26,20 @@ Redmine::Plugin.register :redmine_local_avatars do
   version '1.0.6'
 end
 
-receiver = Object.const_defined?('ActiveSupport::Reloader') ?  ActiveSupport::Reloader : ActionDispatch::Callbacks
-receiver.to_prepare  do
-  require_dependency 'project'
-  require_dependency 'principal'
-  require_dependency 'user'
+Rails.configuration.to_prepare do
+  require_dependency 'redmine_local_avatars/account_controller_patch'
+  require_dependency 'redmine_local_avatars/application_helper_avatar_patch'
+  require_dependency 'redmine_local_avatars/my_controller_patch'
+  require_dependency 'redmine_local_avatars/users_avatar_patch'
+  require_dependency 'redmine_local_avatars/users_controller_patch'
+  require_dependency 'redmine_local_avatars/users_helper_avatar_patch'
 
   helper_klass = ApplicationHelper.method_defined?(:avatar) ? ApplicationHelper : AvatarsHelper
 
-  AccountController.send(:include,  LocalAvatarsPlugin::AccountControllerPatch)
-  helper_klass.send(:include,  LocalAvatarsPlugin::ApplicationAvatarPatch)
-  MyController.send(:include,  LocalAvatarsPlugin::MyControllerPatch)
-  User.send(:include,  LocalAvatarsPlugin::UsersAvatarPatch)
-  UsersController.send(:include,  LocalAvatarsPlugin::UsersControllerPatch)
-  UsersHelper.send(:include,  LocalAvatarsPlugin::UsersHelperPatch)
+  AccountController.send(:include, RedmineLocalAvatars::AccountControllerPatch)
+  helper_klass.send(:include, RedmineLocalAvatars::ApplicationHelperAvatarPatch)
+  MyController.send(:include, RedmineLocalAvatars::MyControllerPatch)
+  User.send(:include, RedmineLocalAvatars::UsersAvatarPatch)
+  UsersController.send(:include, RedmineLocalAvatars::UsersControllerPatch)
+  UsersHelper.send(:include, RedmineLocalAvatars::UsersHelperAvatarPatch)
 end
-
