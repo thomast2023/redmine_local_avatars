@@ -18,32 +18,32 @@
 
 module RedmineLocalAvatars
 	module MyControllerPatch
-	  def self.included(base) # :nodoc:
-		base.class_eval do
-		  helper :attachments
-		  include AttachmentsHelper
-		end
+	  extend ActiveSupport::Concern
   
-		base.send(:include, InstanceMethods)
+	  included do
+		helper :attachments
+		include AttachmentsHelper
 	  end
   
-	  module InstanceMethods
-		def show_avatar
-		  @user = User.current || User.anonymous
-		  logger.debug("MyController User: #{@user}")
-		end
+	  def show_avatar
+		@user = User.current || User.anonymous
+		logger.debug("MyController User: #{@user}")
+	  end
   
-		def save_avatar
-		  @user = User.current
-		  begin
-			save_or_delete_avatar # Call the method from UsersControllerPatch
-			redirect_to :action => 'account', :id => @user
-		  rescue => e
-			$stderr.puts("save_or_delete_avatar raised an exception. exception: #{e.class}: #{e.message}")
-			flash[:error] = @possible_error || e.message
-			redirect_to :action => 'avatar'
-		  end
+	  def save_avatar
+		@user = User.current
+		begin
+		  save_or_delete_avatar # Call the method from UsersControllerPatch
+		  redirect_to :action => 'account', :id => @user
+		rescue => e
+		  $stderr.puts("save_or_delete_avatar raised an exception. exception: #{e.class}: #{e.message}")
+		  flash[:error] = @possible_error || e.message
+		  redirect_to :action => 'avatar'
 		end
 	  end
 	end
   end
+  
+  # Apply the patch to the MyController
+  MyController.send(:include, RedmineLocalAvatars::MyControllerPatch)
+  
